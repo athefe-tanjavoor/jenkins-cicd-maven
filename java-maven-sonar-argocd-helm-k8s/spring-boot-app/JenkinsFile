@@ -10,11 +10,12 @@ pipeline {
         PATH = "$PATH:/usr/local/bin"
     }
 
-stage('Checkout') {
-    steps {
-        git branch: 'main', url: 'https://github.com/athefe-tanjavoor/jenkins-cicd-maven.git'
-    }
-}
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/athefe-tanjavoor/jenkins-cicd-maven.git'
+            }
+        }
 
         stage('Pre-Cleanup') {
             steps {
