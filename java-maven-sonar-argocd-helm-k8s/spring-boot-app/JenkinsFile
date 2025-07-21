@@ -2,7 +2,7 @@ pipeline {
     agent {
         docker {
             image 'maven:3.9.6-eclipse-temurin-17'
-            args '-u root' // run as root to avoid permission issues
+            args '-u root'  // ✅ this line fixes the permission issue
         }
     }
 
@@ -13,15 +13,17 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/athefe-tanjavoor/jenkins-cicd-maven.git'
+                git 'https://github.com/athefe-tanjavoor/jenkins-cicd-maven.git'
             }
         }
 
         stage('Pre-Cleanup') {
             steps {
                 sh '''
-                    echo "Removing target directory if it exists"
-                    rm -rf java-maven-sonar-argocd-helm-k8s/spring-boot-app/target || true
+                    echo "Force killing any process using spring-boot-web.jar"
+                    fuser -k java-maven-sonar-argocd-helm-k8s/spring-boot-app/target/spring-boot-web.jar || true
+                    echo "Removing target directory"
+                    rm -rf java-maven-sonar-argocd-helm-k8s/spring-boot-app/target
                 '''
             }
         }
