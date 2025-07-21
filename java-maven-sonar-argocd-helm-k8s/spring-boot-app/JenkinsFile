@@ -2,7 +2,7 @@ pipeline {
     agent {
         docker {
             image 'maven:3.9.6-eclipse-temurin-17'
-            args '-u root' // Fixes permission issue
+            args '-u root'
         }
     }
 
@@ -47,9 +47,9 @@ pipeline {
                     sh '''
                         cd java-maven-sonar-argocd-helm-k8s/spring-boot-app
                         ${scannerHome}/bin/sonar-scanner \
-                        -Dsonar.projectKey=springboot \
-                        -Dsonar.java.binaries=target \
-                        -Dsonar.projectName="SpringBoot CICD"
+                          -Dsonar.projectKey=springboot \
+                          -Dsonar.java.binaries=target \
+                          -Dsonar.projectName="SpringBoot CICD"
                     '''
                 }
             }
