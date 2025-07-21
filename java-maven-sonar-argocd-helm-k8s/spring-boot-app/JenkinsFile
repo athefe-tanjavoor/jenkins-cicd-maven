@@ -2,6 +2,7 @@ pipeline {
     agent {
         docker {
             image 'maven:3.9.6-eclipse-temurin-17'
+            args '-u root' // run as root to avoid permission issues
         }
     }
 
@@ -19,10 +20,8 @@ pipeline {
         stage('Pre-Cleanup') {
             steps {
                 sh '''
-                    echo "Force killing any process using spring-boot-web.jar"
-                    fuser -k java-maven-sonar-argocd-helm-k8s/spring-boot-app/target/spring-boot-web.jar || true
-                    echo "Removing target directory"
-                    rm -rf java-maven-sonar-argocd-helm-k8s/spring-boot-app/target
+                    echo "Removing target directory if it exists"
+                    rm -rf java-maven-sonar-argocd-helm-k8s/spring-boot-app/target || true
                 '''
             }
         }
